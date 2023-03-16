@@ -107,7 +107,17 @@ func WithStdOut(encoding string) setupOpt {
 
 func WithGCPMapping() setupOpt {
 	return func(cfg *setupConfig) error {
+		cfg.zap.EncoderConfig.TimeKey = "time"
+		cfg.zap.EncoderConfig.LevelKey = "severity"
+		cfg.zap.EncoderConfig.NameKey = "logger"
+		cfg.zap.EncoderConfig.CallerKey = "caller"
+		cfg.zap.EncoderConfig.MessageKey = "message"
+		cfg.zap.EncoderConfig.StacktraceKey = "stacktrace"
+		cfg.zap.EncoderConfig.LineEnding = zapcore.DefaultLineEnding
 		cfg.zap.EncoderConfig.EncodeLevel = gcpEncodeLevel()
+		cfg.zap.EncoderConfig.EncodeTime = zapcore.RFC3339TimeEncoder
+		cfg.zap.EncoderConfig.EncodeDuration = zapcore.MillisDurationEncoder
+		cfg.zap.EncoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
 		return nil
 	}
 }
